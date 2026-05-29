@@ -33,6 +33,7 @@
 #今は具体的にどれを使うなどは決まってないのでとりあえず記述
 
 ・エフェクト（アクションのエフェクト、デスした時のエフェクトなど）
+https://assetstore.unity.com/packages/vfx/particles/cartoon-fx-remaster-free-109565
 
 ・キャラクターモデル（Player、Enemyなど）
 
