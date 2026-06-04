@@ -1,53 +1,35 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
-using R3;               // R3 core
-using R3.Triggers;
 
-public class Player : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float speed;
-    [SerializeField] float jumpSpeed;
+    public float jumpForce = 12f;
+    public float diveForce = 25f;
 
-    public float MaxLife => 100f;
-    public ReactiveProperty<float> life { get; private set; } = new();
+    private Rigidbody2D rb;
+    private int jumpCount = 0;
+    private const int maxJumps = 2;
 
-    PlayerInput playerInput;
-    Rigidbody2D rb;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
-        life.Value = MaxLife;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // 移動
-        var move = playerInput.actions["Move"].ReadValue<Vector2>();
-        if (move.x != 0f)
+        if (Input.GetMouseButtonDown(0) && jumpCount < maxJumps)
         {
-            rb.linearVelocityX = move.x * speed;
-
-            // 向き
-            var localScale = transform.localScale;
-            if (move.x < 0)
-            {
-                localScale.x = 1f;
-            }
-            else
-            {
-                localScale.x = -1f;
-            }
-            transform.localScale = localScale;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            jumpCount++;
         }
 
-        // ジャンプ
-        if (playerInput.actions["Jump"].WasPressedThisFrame())
+        if (Input.GetMouseButton(0) && rb.linearVelocity.y < 0)
         {
-            rb.linearVelocityY = jumpSpeed;
+            rb.AddForce(Vector2.down * diveForce, ForceMode2D.Force);
         }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+       
+        jumpCount = 0;
     }
 }
