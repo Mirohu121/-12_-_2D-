@@ -1,14 +1,18 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
-    public float jumpForce = 12f;
-    public float diveForce = 25f;
+    public float jumpForce = 12f;//ジャンプ力
+    public float diveForce = 25f;//降下力
 
     private Rigidbody2D rb;
     private int jumpCount = 0;
-    private const int maxJumps = 2;
+    private const int maxJumps = 2;//ジャンプ回数
+
+    public TextMeshProUGUI scoreText;
+    private float score = 0f;//スコア値
 
     void Start()
     {
@@ -17,6 +21,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+
+        if (Time.timeScale > 0f)
+        {
+            score += Time.deltaTime * 10f;
+            scoreText.text = "SCORE: " + Mathf.FloorToInt(score).ToString();
+        }
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             Time.timeScale = 1f; 
@@ -50,4 +61,5 @@ public class PlayerController : MonoBehaviour
             Time.timeScale = 0f;
         }
     }
+
 }
