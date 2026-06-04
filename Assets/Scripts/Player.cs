@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,6 +17,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Time.timeScale = 1f; 
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+
         if (Input.GetMouseButtonDown(0) && jumpCount < maxJumps)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
@@ -29,7 +37,17 @@ public class PlayerController : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-       
+
         jumpCount = 0;
+    }
+    //GameOver
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "Nature_props_18")
+        {
+            Debug.Log("ゲームオーバー！");
+
+            Time.timeScale = 0f;
+        }
     }
 }
